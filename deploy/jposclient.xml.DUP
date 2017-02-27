@@ -1,0 +1,6 @@
+<qbean name= "requester" logger ="Q2" realm="requester"
+       class= "Demo2.JposClient" >
+
+    <property name="timeout" value= "30000" />
+    <property name="spaceName" value= "client.response" />
+</qbean>

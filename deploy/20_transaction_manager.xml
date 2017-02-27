@@ -1,0 +1,21 @@
+<txnmgr name="txnmgr" logger="Q2" class="org.jpos.transaction.TransactionManager">
+    <property name="space" value="tspace:mySpace"/>
+    <property name="queue" value="TransactionQueue"/>
+    <property name="max-sessions" value="10"/>
+
+    <participant class="app.Model.Switch" logger="Q2">
+        <property name="0800" value="NetworkManagement" />
+        <property name="0200" value="FinancialTransaction" />
+    </participant>
+
+    <group name="NetworkManagement">
+        <participant class="app.participant.NetworkManagementResponse" logger="Q2" />
+    </group>
+
+    <group name="FinancialTransaction">
+        <participant class="app.participant.FinancialTransactionValidateMessage" logger="Q2" />
+        <participant class="app.participant.FinancialTransactionQueryRemoteHost" logger="Q2" />
+        <participant class="app.participant.FinancialTransactionResponse" logger="Q2" />
+    </group>
+
+</txnmgr>
