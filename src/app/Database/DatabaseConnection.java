@@ -1,4 +1,4 @@
-package Database;
+package app.Database;
 
 import app.Model.Card;
 
@@ -11,7 +11,7 @@ public class DatabaseConnection {
     private static PreparedStatement preparedStatement;
 
     private static Connection connection;
-    public  void connect(){
+    public static void connect(){
         try {
         Class.forName("com.mysql.jdbc.Driver");
 //      Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -33,7 +33,7 @@ public class DatabaseConnection {
     }
     }
 
-    public static boolean verifyDetatils(String cardNumber, Card card ){
+    public static ResultSet verifyDetatils(String cardNumber ){
 
         String queryString = "select *from creditcard " + "where card_number = ?";
 
@@ -52,33 +52,46 @@ public class DatabaseConnection {
                 String first_name = rset.getString("first_name");
                 String middle_name = rset.getString("middle_name");
                 String last_name = rset.getString("last_name");
-                int card_number= rset.getInt("card_number");
+                String card_number= rset.getString("card_number");
                 Date date = rset.getDate("expiry_date");
                 Double balance = rset.getDouble("balance");
                 String card_type;
                 short validation_pin = rset.getShort("validation_pin");
-
-
                 System.out.println(balance);
                 // Display result in a dialog box
 
             }
+            return rset;
 
         }
         catch (SQLException ex) {
             ex.printStackTrace();
         }
 
-        return  false;
+        return  null;
     }
 
     public static void updateBalance(String cardNumber, double amount){
+        try {
+            double balance= verifyDetatils(cardNumber).getDouble("balance");
+            balance = balance - amount;
+            String queryString = "UPDATE creditcard  SET " + "balance = ? WHERE card_number=?";
+            preparedStatement = connection.prepareStatement(queryString);
+            preparedStatement.setDouble(1, balance);
+            preparedStatement.setString(2, cardNumber);
+
+           preparedStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
 
 
     }
     public static void main(String []args){
-        new DatabaseConnection().connect();
+        //DatabaseConnection.connect();
     }
 
 }
