@@ -1,6 +1,7 @@
 package app.participant;
 
 import app.Model.Constant;
+import app.SecurityController;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOSource;
@@ -23,10 +24,8 @@ public class FinancialTransactionValidateMessage implements TransactionParticipa
             ISOMsg respMsg = (ISOMsg) reqMsg.clone();
             respMsg.setResponseMTI();
             respMsg.set(39, "01");
-            requester.send(respMsg);
+            //requester.send(respMsg);
         } catch (ISOException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -38,9 +37,10 @@ public class FinancialTransactionValidateMessage implements TransactionParticipa
     public int prepare(long id, Serializable context) {
         try {
             ISOMsg reqMsg = (ISOMsg) ((Context) context).get(Constant.REQUEST);
-//            String bit124 = reqMsg.getString(124);
+           String bit124 = reqMsg.getString(127);
+            bit124 = SecurityController.decrypt(bit124);
 //            String custId = bit124.substring(0, 5).trim();
-            if(4>0){// if (custId != null && custId.length() > 0) {
+            if(bit124.equals(Constant.key)){// if (custId != null && custId.length() > 0) {
                 return PREPARED;
             }
         } catch (Exception e) {

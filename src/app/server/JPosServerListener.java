@@ -1,5 +1,6 @@
 package app.server;
 
+import app.Database.DatabaseConnection;
 import app.Model.Constant;
 import org.jpos.core.Configurable;
 import org.jpos.core.Configuration;
@@ -11,6 +12,7 @@ import org.jpos.q2.Q2;
 import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
 import org.jpos.transaction.Context;
+
 
 /**
  * Created by nifras on 2/7/17.
@@ -26,8 +28,10 @@ public class JPosServerListener implements ISORequestListener, Configurable {
     }
 
     public static void main(String[] args) {
+        DatabaseConnection.connect();
         Q2 q2 = new Q2();
         q2.start();
+
     }
 
     @Override
