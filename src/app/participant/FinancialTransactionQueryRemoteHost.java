@@ -49,7 +49,7 @@ public class FinancialTransactionQueryRemoteHost implements AbortParticipant {
             ((Context)context).put(Constant.RESPONSE, respMsg);
             ResultSet resultSet = DatabaseConnection.verifyDetatils(respMsg.getString(2));
             if( amount > resultSet.getDouble("balance")){
-                return ABORTED;
+                return ABORTED; 
             }
 
             return PREPARED;
